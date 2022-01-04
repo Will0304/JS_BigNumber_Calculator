@@ -1,0 +1,56 @@
+function add(aa, bb) {
+  [aa,bb] = +aa > +bb ? [aa.split('').reverse(),bb.padStart(aa.length,'0').split('').reverse()] : [aa.padStart(bb.length,'0').split('').reverse(),bb.split('').reverse()]
+  var remainder = 0
+  var result = '' 
+  for (i=0;i<bb.length;i++){ 
+      result+=(((+aa[i])+(+bb[i])+remainder)%10).toString()
+      remainder = Math.floor(((+aa[i])+(+bb[i])+remainder)/10)
+  }
+  return (result+(remainder!='0'?remainder:'')).split('').reverse().join('')
+}
+
+function sub(a, b) { //a always > b -> стысла рассматривать случаи с a<b не надо
+  [a,b] = +a > +b ? [a.split('').reverse(),b.padStart(a.length,'0').split('').reverse()] : [a.padStart(b.length,'0').split('').reverse(),b.split('').reverse()]
+  var rem = 0
+  var result1 = ''
+  for (e=0;e<b.length;e++){
+      result1+=Math.abs(((+a[e])-(+b[e])+rem+10)%10).toString()
+      rem = Math.floor(((+a[e])-(+b[e])+rem)/10)
+  }
+  f = result1.split('').reverse().join('')
+  return /^0*$/.test(f) ? '0' : f.replace(/^0+/,'')
+}
+
+function divideStrings(delimoe,delitel){
+    var ostatok = ''
+    var new_delimoe = ''
+    var new_chastnoe = '0'
+    var counter = 0
+    var chastnoe = ''
+    while (delimoe || +delimoe>=+delitel){
+        for (u=0; u<=delimoe.length; u++){     
+            if (+delimoe.slice(0,u) >= +delitel){
+                new_delimoe = delimoe.slice(0,u)
+                break
+            }else{
+                continue
+            }
+        }
+        if (new_delimoe==''){
+            break
+        }
+        while (+add(new_chastnoe,delitel)<=+new_delimoe){
+            new_chastnoe=add(new_chastnoe,delitel)
+            counter++
+        }
+        chastnoe+=new_delimoe.length>ostatok.length ? '0'.repeat(new_delimoe.length-ostatok.length-1) : ''
+        chastnoe+=counter
+        ostatok = sub(new_delimoe,new_chastnoe)  
+        delimoe=ostatok+delimoe.replace(new_delimoe,'')
+        new_delimoe=new_chastnoe=''
+        counter=0
+    }
+    ostatok = /^0*$/.test(ostatok) ? '0' : ostatok
+    chastnoe = chastnoe.replace(/^0+/,'')
+    return [chastnoe ? chastnoe+'0'.repeat(delimoe.length-ostatok.length) : '0',/^0*$/.test(delimoe) ? '0':delimoe.replace(/^0+/,'')]
+}
