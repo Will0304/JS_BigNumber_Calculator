@@ -1,16 +1,18 @@
 function add(aa, bb) {
-  [aa,bb] = +aa > +bb ? [aa.split('').reverse(),bb.padStart(aa.length,'0').split('').reverse()] : [aa.padStart(bb.length,'0').split('').reverse(),bb.split('').reverse()]
+  [aa,bb] = +aa > +bb ? [aa.split('').reverse(),bb.padStart(aa.length,'0').split('').reverse()]:
+                                                  [aa.padStart(bb.length,'0').split('').reverse(),bb.split('').reverse()]
   var remainder = 0
-  var result = '' 
-  for (i=0;i<bb.length;i++){ 
+  var result = ''
+  for (i=0;i<bb.length;i++){
       result+=(((+aa[i])+(+bb[i])+remainder)%10).toString()
       remainder = Math.floor(((+aa[i])+(+bb[i])+remainder)/10)
   }
   return (result+(remainder!='0'?remainder:'')).split('').reverse().join('')
 }
 
-function sub(a, b) { //a always > b -> стысла рассматривать случаи с a<b не надо
-  [a,b] = +a > +b ? [a.split('').reverse(),b.padStart(a.length,'0').split('').reverse()] : [a.padStart(b.length,'0').split('').reverse(),b.split('').reverse()]
+function sub(a, b) { //a always > b
+  [a,b] = +a > +b ? [a.split('').reverse(),b.padStart(a.length,'0').split('').reverse()]:
+                                          [a.padStart(b.length,'0').split('').reverse(),b.split('').reverse()]
   var rem = 0
   var result1 = ''
   for (e=0;e<b.length;e++){
@@ -21,36 +23,36 @@ function sub(a, b) { //a always > b -> стысла рассматривать �
   return /^0*$/.test(f) ? '0' : f.replace(/^0+/,'')
 }
 
-function divideStrings(delimoe,delitel){
-    var ostatok = ''
-    var new_delimoe = ''
-    var new_chastnoe = '0'
+function divideStrings(numerator,denom){
+    var rem = ''
+    var new_numerator = ''
+    var new_fin = '0'
     var counter = 0
-    var chastnoe = ''
-    while (delimoe || +delimoe>=+delitel){
-        for (u=0; u<=delimoe.length; u++){     
-            if (+delimoe.slice(0,u) >= +delitel){
-                new_delimoe = delimoe.slice(0,u)
+    var fin = ''
+    while (numerator || +numerator>=+denom){
+        for (u=0; u<=numerator.length; u++){
+            if (+numerator.slice(0,u) >= +denom){
+                new_numerator = numerator.slice(0,u)
                 break
             }else{
                 continue
             }
         }
-        if (new_delimoe==''){
+        if (new_numerator==''){
             break
         }
-        while (+add(new_chastnoe,delitel)<=+new_delimoe){
-            new_chastnoe=add(new_chastnoe,delitel)
+        while (+add(new_fin,denom)<=+new_numerator){
+            new_fin=add(new_fin,denom)
             counter++
         }
-        chastnoe+=new_delimoe.length>ostatok.length ? '0'.repeat(new_delimoe.length-ostatok.length-1) : ''
-        chastnoe+=counter
-        ostatok = sub(new_delimoe,new_chastnoe)  
-        delimoe=ostatok+delimoe.replace(new_delimoe,'')
-        new_delimoe=new_chastnoe=''
+        fin+=new_numerator.length>rem.length ? '0'.repeat(new_numerator.length-rem.length-1) : ''
+        fin+=counter
+        rem = sub(new_numerator,new_fin)
+        numerator=rem+numerator.replace(new_numerator,'')
+        new_numerator=new_fin=''
         counter=0
     }
-    ostatok = /^0*$/.test(ostatok) ? '0' : ostatok
-    chastnoe = chastnoe.replace(/^0+/,'')
-    return [chastnoe ? chastnoe+'0'.repeat(delimoe.length-ostatok.length) : '0',/^0*$/.test(delimoe) ? '0':delimoe.replace(/^0+/,'')]
+    rem = /^0*$/.test(rem) ? '0' : rem
+    fin = fin.replace(/^0+/,'')
+    return [fin ? fin+'0'.repeat(numerator.length-rem.length) : '0',/^0*$/.test(numerator) ? '0':numerator.replace(/^0+/,'')]
 }
