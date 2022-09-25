@@ -1,5 +1,5 @@
 function multiply1(a, b) {
-  var rem = 0,result = '' 
+  var rem = 0,result = ''
   b = b.split('').reverse().join('')
   for (i=0;i<b.length;i++){ 
     result+= ((parseInt(a)*parseInt(b.charAt(i))+rem)%10).toString()
